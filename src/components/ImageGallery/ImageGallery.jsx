@@ -1,33 +1,47 @@
+import { Component } from "react"
+import toast from 'react-hot-toast';
 import { getImg } from "components/APIservice"
 import { Loader } from "components/Loader/Loader";
-import { Component } from "react"
 import { ImageGalleryItem } from "../ImageGalleryItem/ImageGalleryItem";
-import toast from 'react-hot-toast';
+import { Button } from "components/Button/Button";
 
 
 export class ImageGallery extends Component {
 
     state = {
-        images: '',
+        images: [],
         loading: false,
-
+        button: false,
+        page: 1
     }
 
     componentDidUpdate(prevProps, prevState) {
-        const { input } = this.props; 
+        const { input } = this.props;
+        const { page } = this.state;
 
-        if (prevProps.input !== input) {
-            this.setState({ images: '' })
+        if (
+            prevProps.input !== input
+        ) {
+            this.setState({ images: [] })
+        }
+
+        if (
+            prevProps.input !== input ||
+            prevState.page !== page
+        ) {
             this.setState({ loading: true });
 
-            getImg(input)
+            getImg(input.trim(), page)
                 .then(response => {
                     return response.json();
                 }).then((images) => {
                     if (images.total===0) {
                         return toast.error('There was no images found on your request.')
                     } else {    
-                        this.setState({ images })
+                        this.setState({
+                            images: [...this.state.images, ...images.hits], 
+                            button: page < Math.ceil(images.totalHits / 12),
+                        })
                         return toast.success(`${images.totalHits} images found!`)
                     }
                 }).catch((error) => {
@@ -41,16 +55,23 @@ export class ImageGallery extends Component {
         }
     }
 
+    handleLoad = () => {
+        this.setState((prevState) => ({page: prevState.page+1}))
+    }
+
     render() {
         const { images, loading } = this.state;
         return (
-            <ul>
-                {loading && <Loader/> }
-                {images &&
-                    images.hits.map(({ id, webformatURL, tags, largeImageURL }) => {
-                        return <ImageGalleryItem key={id} src={webformatURL} alt={tags} name={largeImageURL} />
+            <div>
+                {loading && <Loader/> } 
+                <ul>
+                    {images &&
+                        images.map(({ id, webformatURL, tags, largeImageURL } ) => {
+                            return <ImageGalleryItem key={id} src={webformatURL} alt={tags} name={largeImageURL} />
                     })}
-            </ul>
+                </ul>
+                {this.state.button && <Button onClick={this.handleLoad} /> }
+            </div>
         )
     }
 }
