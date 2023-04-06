@@ -17,7 +17,6 @@ export class Searchbar extends Component {
         if (!value) {
            return toast.error('There was an error in your request.')
         }
-        toast.loading('Loading...');
         this.props.onSearch(value);
         this.setState({value: ''})
     }
