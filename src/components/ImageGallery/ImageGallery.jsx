@@ -28,6 +28,7 @@ export class ImageGallery extends Component {
                         return toast.error('There was no images found on your request.')
                     } else {    
                         this.setState({ images })
+                        return toast.success(`${images.totalHits} images found!`)
                     }
                 }).catch((error) => {
                     console.log(error);
