@@ -29,7 +29,11 @@ export class ImageGallery extends Component {
                     } else {    
                         this.setState({ images })
                     }
-                }).finally(() => {
+                }).catch((error) => {
+                    console.log(error);
+                    return toast.error('Something went wrong. Please try again.')
+                })
+                .finally(() => {
                     this.setState({ loading: false });  
                 })
                 
