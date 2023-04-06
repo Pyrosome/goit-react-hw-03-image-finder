@@ -15,7 +15,7 @@ export class Searchbar extends Component {
         const { value } = this.state;
         evt.preventDefault();
         if (!value) {
-           return toast.error('There was an error in your request.')
+           return toast.error('Please type in your request.')
         }
         this.props.onSearch(value);
         this.setState({value: ''})

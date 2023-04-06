@@ -3,8 +3,6 @@ import { ImageGallery } from "./ImageGallery/ImageGallery";
 import { Searchbar } from "./Searchbar/Searchbar";
 import { Toaster } from 'react-hot-toast';
 
-
-
 export class App extends Component {
   state = {
     searchInput: '',
@@ -26,7 +24,7 @@ export class App extends Component {
         color: '#010101'
       }}
       >
-        <Toaster position="top-right" toastOptions={{ duration: 1000}}/>
+        <Toaster position="top-right" toastOptions={{ duration: 1500, style: { gap: '10px'}}}/>
         <Searchbar onSearch={this.handleSubmit}/>
         <ImageGallery input={searchInput} />
         

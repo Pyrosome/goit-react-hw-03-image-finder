@@ -2,6 +2,8 @@ import { getImg } from "components/APIservice"
 import { Loader } from "components/Loader/Loader";
 import { Component } from "react"
 import { ImageGalleryItem } from "../ImageGalleryItem/ImageGalleryItem";
+import toast from 'react-hot-toast';
+
 
 export class ImageGallery extends Component {
 
@@ -15,17 +17,18 @@ export class ImageGallery extends Component {
         const { input } = this.props; 
 
         if (prevProps.input !== input) {
+            this.setState({ images: '' })
             this.setState({ loading: true });
 
             getImg(input)
                 .then(response => {
-                    if (response.ok) {
-                        return response.json();
-                    }
+                    return response.json();
                 }).then((images) => {
-                    this.setState({ images })
-                }).catch((error) => {
-                    console.log(error)
+                    if (images.total===0) {
+                        return toast.error('There was no images found on your request.')
+                    } else {    
+                        this.setState({ images })
+                    }
                 }).finally(() => {
                     this.setState({ loading: false });  
                 })
