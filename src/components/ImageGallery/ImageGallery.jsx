@@ -5,6 +5,7 @@ import { ImageGalleryItem } from "../ImageGalleryItem/ImageGalleryItem";
 import { GalleryUl } from './ImageGallery.styled';
 import { Loader } from "components/Loader/Loader";
 import { Button } from "components/Button/Button";
+import { Modal } from "components/Modal/Modal";
 
 
 export class ImageGallery extends Component {
@@ -13,7 +14,9 @@ export class ImageGallery extends Component {
         images: [],
         loading: false,
         button: false,
-        page: 1
+        page: 1,
+        openModal: false,
+        largeImg: ''
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -60,18 +63,33 @@ export class ImageGallery extends Component {
         this.setState((prevState) => ({page: prevState.page+1}))
     }
 
+    onClickImg = e => {
+        console.log(e.target.name);
+        this.setState({
+            largeImg: e.target.name,
+            openModal: true,
+        });
+    };
+
+  closeModal = () => {
+    this.setState({
+      openModal: false,
+    });
+  };
+
     render() {
-        const { images, loading, page } = this.state;
+        const { images, loading, page, largeImg } = this.state;
         return (
             <div>
                 {loading && page===1 && <Loader/> } 
                 <GalleryUl>
                     {images &&
                         images.map(({ id, webformatURL, tags, largeImageURL } ) => {
-                            return <ImageGalleryItem key={id} src={webformatURL} alt={tags} name={largeImageURL} />
+                            return <ImageGalleryItem key={id} src={webformatURL} alt={tags} name={largeImageURL} onClick={this.onClickImg} />
                     })}
                 </GalleryUl>
-                {this.state.button && <Button onClick={this.handleLoad} /> }
+                {this.state.button && <Button onClick={this.handleLoad} />}
+                {this.state.openModal && <Modal selectedImage={largeImg} onClose={this.closeModal} />}
             </div>
         )
     }
