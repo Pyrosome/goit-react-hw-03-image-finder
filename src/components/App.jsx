@@ -18,10 +18,10 @@ export class App extends Component {
     return (
       <div
       style={{
-        height: '100vh',
-        width: '100vh',
-        fontSize: 30,
-        color: '#010101'
+        display: 'grid',
+        gridTemplateColumns: '1fr',
+        gridGap: '16px',
+        paddingBottom: '24px',
       }}
       >
         <Toaster position="top-right" toastOptions={{ duration: 1500, style: { gap: '10px'}}}/>

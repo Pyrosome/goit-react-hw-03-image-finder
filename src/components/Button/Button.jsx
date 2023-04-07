@@ -1,10 +1,11 @@
+import { ButtonStyled } from './Button.styled';
 import propTypes from 'prop-types';
 
 export const Button = ({ onClick }) => {
     return (
-        <>
-            <button onClick={onClick} type="button">Load More</button>
-        </>
+        <div style={{position: 'absolute'}}>
+            <ButtonStyled onClick={onClick} type="button">Load More</ButtonStyled>
+        </div>
  )
 }
 

@@ -1,8 +1,9 @@
 import { Component } from "react"
 import toast from 'react-hot-toast';
 import { getImg } from "components/APIservice"
-import { Loader } from "components/Loader/Loader";
 import { ImageGalleryItem } from "../ImageGalleryItem/ImageGalleryItem";
+import { GalleryUl } from './ImageGallery.styled';
+import { Loader } from "components/Loader/Loader";
 import { Button } from "components/Button/Button";
 
 
@@ -19,10 +20,8 @@ export class ImageGallery extends Component {
         const { input } = this.props;
         const { page } = this.state;
 
-        if (
-            prevProps.input !== input
-        ) {
-            this.setState({ images: [] })
+        if (prevProps.input !== input) {
+            this.setState({ images: [], page: 1 })
         }
 
         if (
@@ -42,7 +41,9 @@ export class ImageGallery extends Component {
                             images: [...this.state.images, ...images.hits], 
                             button: page < Math.ceil(images.totalHits / 12),
                         })
-                        return toast.success(`${images.totalHits} images found!`)
+                        if (page===1) {
+                            return toast.success(`${images.totalHits} images found!`)
+                        }
                     }
                 }).catch((error) => {
                     console.log(error);
@@ -60,16 +61,16 @@ export class ImageGallery extends Component {
     }
 
     render() {
-        const { images, loading } = this.state;
+        const { images, loading, page } = this.state;
         return (
             <div>
-                {loading && <Loader/> } 
-                <ul>
+                {loading && page===1 && <Loader/> } 
+                <GalleryUl>
                     {images &&
                         images.map(({ id, webformatURL, tags, largeImageURL } ) => {
                             return <ImageGalleryItem key={id} src={webformatURL} alt={tags} name={largeImageURL} />
                     })}
-                </ul>
+                </GalleryUl>
                 {this.state.button && <Button onClick={this.handleLoad} /> }
             </div>
         )

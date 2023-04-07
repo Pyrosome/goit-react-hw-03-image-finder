@@ -1,9 +1,10 @@
 import { ColorRing } from 'react-loader-spinner'
-
+import { Backdrop } from './Loader.styled'
 
 export const Loader = () => {
     return (
-        <ColorRing
+        <Backdrop>
+            <ColorRing
             visible={true}
             height="80"
             width="80"
@@ -11,6 +12,7 @@ export const Loader = () => {
             wrapperStyle={{}}
             wrapperClass="blocks-wrapper"
             colors={['#849b87']}
-        />
+            />
+        </Backdrop>
     )
 }
