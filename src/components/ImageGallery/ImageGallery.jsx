@@ -14,22 +14,21 @@ export class ImageGallery extends Component {
         images: [],
         loading: false,
         button: false,
-        page: 1,
         openModal: false,
         largeImg: ''
     }
 
     componentDidUpdate(prevProps, prevState) {
         const { input } = this.props;
-        const { page } = this.state;
+        const { page } = this.props;
 
         if (prevProps.input !== input) {
-            this.setState({ images: [], page: 1 })
+            this.setState({ images: []})
         }
 
         if (
             prevProps.input !== input ||
-            prevState.page !== page
+            prevProps.page !== page
         ) {
             this.setState({ loading: true });
 
@@ -60,7 +59,7 @@ export class ImageGallery extends Component {
     }
 
     handleLoad = () => {
-        this.setState((prevState) => ({page: prevState.page+1}))
+        this.props.onLoad()
     }
 
     onClickImg = e => {
@@ -71,14 +70,15 @@ export class ImageGallery extends Component {
         });
     };
 
-  closeModal = () => {
-    this.setState({
-      openModal: false,
-    });
-  };
+     closeModal = () => {
+       this.setState({
+         openModal: false,
+       });
+     };
 
     render() {
-        const { images, loading, page, largeImg } = this.state;
+        const { images, loading, largeImg } = this.state;
+        const { page} = this.props;
         return (
             <div>
                 {loading && page===1 && <Loader/> } 

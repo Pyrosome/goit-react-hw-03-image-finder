@@ -6,14 +6,19 @@ import { Toaster } from 'react-hot-toast';
 export class App extends Component {
   state = {
     searchInput: '',
+    page: 1
   }
 
   handleSubmit = (searchInput) => {
-    this.setState({ searchInput })
+    this.setState({ searchInput, page: 1 })
   }
 
+    handleLoad = () => {
+      this.setState((prevState) => ({page: prevState.page+1}))
+    }
+
   render() {
-    const { searchInput } = this.state;
+    const { searchInput, page } = this.state;
 
     return (
       <div
@@ -26,7 +31,7 @@ export class App extends Component {
       >
         <Toaster position="top-right" toastOptions={{ duration: 1500, style: { gap: '10px'}}}/>
         <Searchbar onSearch={this.handleSubmit}/>
-        <ImageGallery input={searchInput} />
+        <ImageGallery input={searchInput} page={page} onLoad={this.handleLoad} />
         
         
       </div>
